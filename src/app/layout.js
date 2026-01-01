@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         {/* 2. Google Search Console Verification */}
-        <meta name="google-site-verification" content="v5L1VmCS4TCMUuZ5B1JOivTE91Q9tqxjxJn0dHiYjT0" />
+        <meta name="google-site-verification" content="KZMiUBpTZfkZsUt47NLT88ssUsu9hFOez6aaHVBvLqg" />
 
         {/* 3. Google Analytics (GA4) */}
         <script async src={`https://www.googletagmanager.com/gtag/js?id=G-8GJDFYFWT2`}></script>
