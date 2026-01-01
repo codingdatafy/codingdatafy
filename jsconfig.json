@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2021",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "checkJs": true,
+    "incremental": true
+  },
+  "exclude": ["node_modules", ".next"]
+}
