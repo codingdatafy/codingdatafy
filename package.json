@@ -18,7 +18,8 @@
     "gray-matter": "^4.0.3",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
-	"@next/third-parties": "latest"
+	"@next/third-parties": "latest",
+	"@vercel/analytics": "latest"
   },
   "devDependencies": {
     "eslint": "^9.0.0",

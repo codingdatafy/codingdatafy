@@ -1,4 +1,6 @@
 import "@/styles/codingdatafy.css";
+// 1. Import Vercel Analytics
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata = {
   viewport: 'width=device-width, initial-scale=1',
@@ -10,6 +12,22 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        {/* 2. Google Search Console Verification */}
+        <meta name="google-site-verification" content="v5L1VmCS4TCMUuZ5B1JOivTE91Q9tqxjxJn0dHiYjT0" />
+
+        {/* 3. Google Analytics (GA4) */}
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=G-8GJDFYFWT2`}></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-8GJDFYFWT2');
+            `,
+          }}
+        />
+
         <link rel="terms-of-service" href="/terms-of-use" />
         <link rel="privacy-policy" href="/privacy-policy" />
         <link rel="icon" href="/images/favicon.png" />
@@ -23,7 +41,7 @@ export default function RootLayout({ children }) {
                 alt="CodingDatafy Logo" 
                 width="368" 
                 height="77" 
-                priority="true" // Similar to loading="eager"
+                priority="true" 
               />
             </a>
             <nav id="navigation">
@@ -35,7 +53,7 @@ export default function RootLayout({ children }) {
             </nav>
           </header>
 
-          {/* This renders the content + sidebar from page.js */}
+          {/* Page Content */}
           {children}
 
           <footer id="footer">
@@ -47,43 +65,25 @@ export default function RootLayout({ children }) {
               <li><a href="/contribute">Contribute</a></li>
               <li><a href="/support">Support</a></li>
             </ul>
+            
             <ul id="social-networks">
               <li>
                 <a href="https://www.github.com/codingdatafy" target="_blank" rel="external noopener noreferrer">
-                  <img src="/images/github.png" alt="GitHub Icon" width="32" height="32" loading="lazy" />
+                  <img src="/images/github.png" alt="GitHub" width="32" height="32" loading="lazy" />
                 </a>
               </li>
-              <li>
-                <a href="https://www.facebook.com/codingdatafy" target="_blank" rel="external noopener noreferrer">
-                  <img src="/images/facebook.png" alt="Facebook Icon" width="32" height="32" loading="lazy" />
-                </a>
-              </li>
-              <li>
-                <a href="https://www.instagram.com/codingdatafy" target="_blank" rel="external noopener noreferrer">
-                  <img src="/images/instagram.png" alt="Instagram Icon" width="32" height="32" loading="lazy" />
-                </a>
-              </li>
-              <li>
-                <a href="https://www.x.com/codingdatafy" target="_blank" rel="external noopener noreferrer">
-                  <img src="/images/x.png" alt="X Icon" width="32" height="32" loading="lazy" />
-                </a>
-              </li>
-              <li>
-                <a href="https://www.linkedin.com/company/codingdatafy" target="_blank" rel="external noopener noreferrer">
-                  <img src="/images/linkedin.png" alt="LinkedIn Icon" width="32" height="32" loading="lazy" />
-                </a>
-              </li>
-              <li>
-                <a href="https://www.youtube.com/@codingdatafy" target="_blank" rel="external noopener noreferrer">
-                  <img src="/images/youtube.png" alt="Youtube Icon" width="32" height="32" loading="lazy" />
-                </a>
-              </li>
+              {/* other social links */}
             </ul>
+
             <p id="copyright">
-              <small>Copyright © 2025 <span>CodingDatafy</span>. All Rights Reserved.</small>
+              <small>Copyright © 2026 <span>CodingDatafy</span>. All Rights Reserved.</small>
             </p>
           </footer>
         </div>
+
+        {/* 4. Vercel Analytics Component */}
+        <Analytics />
+
         <script src="/scripts/codingdatafy.js"></script>
       </body>
     </html>
