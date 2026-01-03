@@ -18,8 +18,22 @@ export async function generateMetadata({ params }) {
   const currentPath = slug ? `/${slug.join('/')}` : '';
   const canonicalUrl = `${BASE_URL}${currentPath}`;
 
+  // 1. Get the raw title from Markdown
+  let rawTitle = data.meta.title || "";
+
+  // 2. Clean the title: remove " - Homepage" or any existing " | CodingDatafy" 
+  let cleanTitle = rawTitle
+    .replace(/ - Homepage/gi, "")
+    .replace(/ \| CodingDatafy/gi, "")
+    .trim();
+
+  // 3. Final Title Logic
+  const finalTitle = slug && slug.length > 0 
+    ? `${cleanTitle} | CodingDatafy` 
+    : "CodingDatafy | Documentation Hub";
+
   return {
-    title: data.meta.title ? `${data.meta.title} | CodingDatafy` : "CodingDatafy",
+    title: finalTitle,
     description: data.meta.description || "Explore comprehensive and easy-to-follow documentation for various programming languages.",
     alternates: {
       canonical: canonicalUrl,
