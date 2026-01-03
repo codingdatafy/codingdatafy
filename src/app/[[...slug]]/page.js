@@ -63,10 +63,7 @@ export default async function Page({ params }) {
           {/* Main article body converted from Markdown to HTML */}
           <div id="article-main" dangerouslySetInnerHTML={{ __html: data.contentHtml }} />
 
-          {/* Footer section updated: Date display removed to simplify UI */}
-          <footer id="article-footer">
-            {/* Last Updated feature is currently disabled to focus on content growth */}
-          </footer>
+          {/* Note: The article footer was removed to clean up the UI after disabling the date feature */}
         </article>
       </main>
 
