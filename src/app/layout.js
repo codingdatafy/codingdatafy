@@ -1,6 +1,7 @@
 import "@/styles/codingdatafy.css";
-// 1. Import Vercel Analytics
+// 1. Import Vercel Analytics & Speed Insights
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
   viewport: 'width=device-width, initial-scale=1',
@@ -54,7 +55,7 @@ export default function RootLayout({ children }) {
             </nav>
           </header>
 
-          {/* Render the page content - Note: Last Update date is now disabled in the data fetcher */}
+          {/* Render the page content */}
           {children}
 
           <footer id="footer">
@@ -81,8 +82,9 @@ export default function RootLayout({ children }) {
           </footer>
         </div>
 
-        {/* 4. Vercel Analytics Component */}
+        {/* 4. Vercel Insights & Analytics */}
         <Analytics />
+        <SpeedInsights />
 
         <script src="/scripts/codingdatafy.js"></script>
       </body>
