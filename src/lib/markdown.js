@@ -8,30 +8,39 @@ const contentDirectory = path.join(process.cwd(), 'content');
 
 /**
  * Fetches the last commit date for a specific file from GitHub API
- * @param {string} filePath - Path to the file in the repository (e.g., 'content/index.md')
+ * @param {string} filePath - Path to the file in the repo
  */
 async function getGitHubLastUpdated(filePath) {
   try {
-    // Fetches the most recent commit that modified this specific file
     const response = await fetch(
-      `https://api.github.com/repos/codingdatafy/content/commits?path=${filePath}&page=1&per_page=1`,
+      `https://api.github.com/repos/codingdatafy/codingdatafy/commits?path=${filePath}&page=1&per_page=1`,
       {
-        next: { revalidate: 3600 } // Revalidate cache every hour
+        next: { revalidate: 3600 } // Cache results for 1 hour
       }
     );
+
+    if (!response.ok) {
+      throw new Error(`GitHub API error: ${response.status}`);
+    }
+
     const data = await response.json();
+    
     if (data && data.length > 0) {
-      return data[0].commit.committer.date.split('T')[0]; // Returns YYYY-MM-DD
+      // Returns the date in YYYY-MM-DD format
+      return data[0].commit.committer.date.split('T')[0];
     }
   } catch (error) {
     console.error("Failed to fetch GitHub date for:", filePath, error);
   }
-  return new Date().toISOString().split('T')[0]; // Fallback to current date
+  
+  // Fallback: Using a static date or null instead of current date 
+  // to avoid misleading users when the API fails.
+  return "2026-01-01"; 
 }
 
 /**
  * Main function to fetch and process page content
- * @param {string[]} slugArray - URL segments
+ * @param {string[]} slugArray - URL segments from Next.js
  */
 export async function getPageData(slugArray) {
   // 1. Resolve the file path: join slugs or default to 'index'
@@ -84,7 +93,7 @@ export async function getPageData(slugArray) {
       title: data.title || 'CodingDatafy Documentation',
       description: data.description || '',
       style: data.style || '', 
-      date: data.date || autoDate, 
+      date: data.date || autoDate,
       ...data
     },
   };
