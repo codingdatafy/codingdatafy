@@ -36,12 +36,13 @@ export default function RootLayout({ children }) {
         <div id="root">
           <header id="header">
             <a href="/" id="logo">
+              {/* Optimized logo with Next.js priority attribute */}
               <img 
                 src="/images/logo.png" 
                 alt="CodingDatafy Logo" 
                 width="368" 
                 height="77" 
-                priority="true" 
+                priority 
               />
             </a>
             <nav id="navigation">
@@ -53,7 +54,7 @@ export default function RootLayout({ children }) {
             </nav>
           </header>
 
-          {/* Page Content */}
+          {/* Render the page content - Note: Last Update date is now disabled in the data fetcher */}
           {children}
 
           <footer id="footer">
@@ -72,7 +73,6 @@ export default function RootLayout({ children }) {
                   <img src="/images/github.png" alt="GitHub" width="32" height="32" loading="lazy" />
                 </a>
               </li>
-              {/* other social links */}
             </ul>
 
             <p id="copyright">
