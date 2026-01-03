@@ -15,17 +15,12 @@ export async function generateMetadata({ params }) {
 
   if (!data) return {};
 
-  // Construct the canonical URL for SEO indexing
   const currentPath = slug ? `/${slug.join('/')}` : '';
   const canonicalUrl = `${BASE_URL}${currentPath}`;
 
   return {
-    // Appends brand name to the title for better recognition
     title: data.meta.title ? `${data.meta.title} | CodingDatafy` : "CodingDatafy",
-    
-    // Fallback description to ensure 100/100 SEO score if Markdown is missing description
-    description: data.meta.description || "Explore comprehensive and easy-to-follow documentation for various programming languages. Master coding with our detailed guides, syntax references, and practical examples at CodingDatafy.",
-    
+    description: data.meta.description || "Explore comprehensive and easy-to-follow documentation for various programming languages.",
     alternates: {
       canonical: canonicalUrl,
     },
@@ -44,9 +39,7 @@ export default async function Page({ params }) {
 
   return (
     <div id="content">
-      {/* Dynamic Style Injection: 
-        Uses precedence="high" to hoist the link to <head>, preventing FOUC and improving SEO.
-      */}
+      {/* Dynamic Style Injection */}
       {data.meta.style && (
         <link 
           rel="stylesheet" 
@@ -55,7 +48,7 @@ export default async function Page({ params }) {
         />
       )}
 
-      {/* Sidebar Section: Rendered only if sidebar content is available */}
+      {/* Sidebar Section */}
       {data.sidebarHtml && (
         <aside id="sidebar" dangerouslySetInnerHTML={{ __html: data.sidebarHtml }} />
       )}
@@ -70,20 +63,11 @@ export default async function Page({ params }) {
           {/* Main article body converted from Markdown to HTML */}
           <div id="article-main" dangerouslySetInnerHTML={{ __html: data.contentHtml }} />
 
-          <footer id="article-footer">
-            {/* Display Last Updated date if provided in Frontmatter */}
-            {data.meta.date && (
-              <p>
-                <time dateTime={data.meta.date}>Last Updated: {data.meta.date}</time>
-              </p>
-            )}
-          </footer>
+          {/* Note: The article footer was removed to clean up the UI after disabling the date feature */}
         </article>
       </main>
 
-      {/* Global Site Script: 
-        Loaded after the page becomes interactive to optimize TBT and LCP metrics.
-      */}
+      {/* Global Site Script */}
       <Script 
         src="/scripts/codingdatafy.js" 
         strategy="afterInteractive" 
