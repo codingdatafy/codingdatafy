@@ -1,10 +1,25 @@
 import "@/styles/codingdatafy.css";
-// 1. Import Vercel Analytics & Speed Insights
+// 1. Import Vercel performance monitoring tools
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+/**
+ * Static Metadata for SEO.
+ * Note: viewport and themeColor are moved to a separate export to comply with Next.js 15+ standards
+ * and ensure clean build logs.
+ */
 export const metadata = {
-  viewport: 'width=device-width, initial-scale=1',
+  title: "CodingDatafy",
+  description: "Advanced technical data insights and programming resources.",
+};
+
+/**
+ * Viewport configuration for responsive design and browser UI colors.
+ * Separating this prevents "Unsupported metadata" warnings during build.
+ */
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
   themeColor: 'rgb(50 205 50)',
   colorScheme: 'only light',
 };
@@ -13,10 +28,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* 2. Google Search Console Verification */}
+        {/* Verification for Google Search Console */}
         <meta name="google-site-verification" content="KZMiUBpTZfkZsUt47NLT88ssUsu9hFOez6aaHVBvLqg" />
 
-        {/* 3. Google Analytics (GA4) */}
+        {/* Global Site Tag (gtag.js) - Google Analytics (GA4) */}
         <script async src={`https://www.googletagmanager.com/gtag/js?id=G-8GJDFYFWT2`}></script>
         <script
           dangerouslySetInnerHTML={{
@@ -29,21 +44,23 @@ export default function RootLayout({ children }) {
           }}
         />
 
+        {/* Legal and identity links */}
         <link rel="terms-of-service" href="/terms-of-use" />
         <link rel="privacy-policy" href="/privacy-policy" />
         <link rel="icon" href="/images/favicon.png" />
       </head>
       <body>
         <div id="root">
+          {/* Main Application Header */}
           <header id="header">
             <a href="/" id="logo">
-              {/* Optimized logo with Next.js priority attribute */}
+              {/* Logo is optimized for LCP (Largest Contentful Paint) */}
               <img 
                 src="/images/logo.png" 
                 alt="CodingDatafy Logo" 
                 width="368" 
                 height="77" 
-                priority 
+                priority="true" 
               />
             </a>
             <nav id="navigation">
@@ -55,9 +72,10 @@ export default function RootLayout({ children }) {
             </nav>
           </header>
 
-          {/* Render the page content */}
+          {/* Dynamic Content Injection */}
           {children}
 
+          {/* Main Application Footer */}
           <footer id="footer">
             <ul id="footer-links">
               <li><a href="/about">About</a></li>
@@ -82,10 +100,11 @@ export default function RootLayout({ children }) {
           </footer>
         </div>
 
-        {/* 4. Vercel Insights & Analytics */}
+        {/* Vercel monitoring scripts injected at the end of the body */}
         <Analytics />
         <SpeedInsights />
 
+        {/* Custom client-side logic */}
         <script src="/scripts/codingdatafy.js"></script>
       </body>
     </html>
