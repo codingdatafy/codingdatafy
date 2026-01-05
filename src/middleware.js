@@ -1,36 +1,43 @@
 import { NextResponse } from 'next/server';
 
 /**
- * Middleware to filter requests and handle security
+ * CODINGDATAFY INFRASTRUCTURE MIDDLEWARE
+ * Purpose: Handles Canonical URLs, Private Content Protection, and Security Headers.
+ * * Note for contributors: This middleware is designed to work behind Cloudflare Proxy.
+ * Changing the redirection logic may affect SEO and SSL certificates.
  */
 export function middleware(request) {
-  const { pathname } = request.nextUrl;
+  const { pathname, hostname } = request.nextUrl;
 
-  // 1. Prevent access to private content files (starting with _)
-  // Example: prevent users from trying to access /_sidebar directly
+  // 1. CANONICAL URL ENFORCEMENT
+  // Redirects www to non-www to ensure SEO consistency across the infrastructure
+  if (hostname.startsWith('www.')) {
+    const newHostname = hostname.replace('www.', '');
+    const url = request.nextUrl.clone();
+    url.hostname = newHostname;
+    return NextResponse.redirect(url, 301);
+  }
+
+  // 2. PRIVATE CONTENT SHIELD
+  // Prevents direct access to internal Markdown or config files starting with '_'
   if (pathname.includes('/_')) {
     return new NextResponse(null, { status: 404 });
   }
 
-  // 2. Security Headers
+  // 3. SECURITY RESPONSE HEADERS
   const response = NextResponse.next();
-  response.headers.set('X-Frame-Options', 'DENY');
+  
+  // SAMEORIGIN allows the site to be embedded only within itself (prevents Clickjacking)
+  response.headers.set('X-Frame-Options', 'SAMEORIGIN');
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  
+  // Branding/Debug Header to verify infrastructure optimization
+  response.headers.set('x-infrastructure', 'codingdatafy-optimized');
 
   return response;
 }
 
-// Configure which paths the middleware runs on
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };
