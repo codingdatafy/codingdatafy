@@ -1,59 +1,51 @@
 import { getPageData } from "@/lib/markdown";
 import { notFound } from "next/navigation";
-import Script from 'next/script';
-
-// Base URL for Canonical links (SEO)
-const BASE_URL = 'https://www.codingdatafy.com';
 
 /**
- * Dynamic Metadata Generation for SEO
- * Ensures every page has a title, canonical URL, and meta description.
+ * CODINGDATAFY DYNAMIC PAGE RENDERER
+ * Purpose: Fetches Markdown content based on the URL slug and renders it into the UI.
+ * Features: Metadata generation, Sidebar injection, and Dynamic Style loading.
  */
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const data = await getPageData(slug);
 
   if (!data) return {};
 
-  const currentPath = slug ? `/${slug.join('/')}` : '';
-  const canonicalUrl = `${BASE_URL}${currentPath}`;
-
-  // 1. Get the raw title from Markdown
-  let rawTitle = data.meta.title || "";
-
-  // 2. Clean the title: remove " - Homepage" or any existing " | CodingDatafy" 
-  let cleanTitle = rawTitle
-    .replace(/ - Homepage/gi, "")
-    .replace(/ \| CodingDatafy/gi, "")
-    .trim();
-
-  // 3. Final Title Logic
-  const finalTitle = slug && slug.length > 0 
-    ? `${cleanTitle} | CodingDatafy` 
-    : "CodingDatafy | Documentation Hub";
+  // Construct page-specific SEO attributes
+  const title = data.meta.title;
+  const description = data.meta.description || "Master programming with CodingDatafy's expert-led documentation.";
 
   return {
-    title: finalTitle,
-    description: data.meta.description || "Explore comprehensive and easy-to-follow documentation for various programming languages.",
-    alternates: {
-      canonical: canonicalUrl,
+    title: title, // This will be wrapped by the template in layout.js
+    description: description,
+    openGraph: {
+      title: title,
+      description: description,
+      url: `https://www.codingdatafy.com/${slug?.join('/') || ''}`,
+      siteName: 'CodingDatafy',
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: title,
+      description: description,
     },
   };
 }
 
-/**
- * Universal Page Component: Renders Markdown content, Sidebars, and dynamic assets
- */
 export default async function Page({ params }) {
   const { slug } = await params;
   const data = await getPageData(slug);
 
-  // If page doesn't exist, trigger Next.js 404
+  // Trigger Next.js native 404 if data fetch fails
   if (!data) notFound();
 
   return (
-    <div id="content">
-      {/* Dynamic Style Injection */}
+    <div id="page-container" className="documentation-layout">
+      {/* DYNAMIC COMPONENT STYLES
+          Loaded only when a specific markdown file requests a custom style. */}
       {data.meta.style && (
         <link 
           rel="stylesheet" 
@@ -62,30 +54,29 @@ export default async function Page({ params }) {
         />
       )}
 
-      {/* Sidebar Section */}
+      {/* SIDEBAR NAVIGATION
+          Rendered only if a _sidebar.md exists in the directory. */}
       {data.sidebarHtml && (
-        <aside id="sidebar" dangerouslySetInnerHTML={{ __html: data.sidebarHtml }} />
+        <aside id="sidebar" className="docs-sidebar">
+          <nav dangerouslySetInnerHTML={{ __html: data.sidebarHtml }} />
+        </aside>
       )}
 
-      {/* Main Content Area */}
-      <main id="main">
-        <article id="article">
+      {/* PRIMARY CONTENT AREA */}
+      <main id="main" className="docs-main">
+        <article id="article" className="prose-optimized">
           <header id="article-header">
             <h1 id="article-title">{data.meta.title}</h1>
           </header>
           
-          {/* Main article body converted from Markdown to HTML */}
-          <div id="article-main" dangerouslySetInnerHTML={{ __html: data.contentHtml }} />
-
-          {/* Note: The article footer was removed to clean up the UI after disabling the date feature */}
+          {/* MAIN BODY
+              Converted Markdown content with safe HTML injection. */}
+          <section 
+            id="article-body" 
+            dangerouslySetInnerHTML={{ __html: data.contentHtml }} 
+          />
         </article>
       </main>
-
-      {/* Global Site Script */}
-      <Script 
-        src="/scripts/codingdatafy.js" 
-        strategy="afterInteractive" 
-      />
     </div>
   );
 }

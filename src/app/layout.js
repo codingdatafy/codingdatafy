@@ -1,66 +1,52 @@
 import "@/styles/codingdatafy.css";
-// 1. Import Vercel performance monitoring tools
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 /**
- * Static Metadata for SEO.
- * Note: viewport and themeColor are moved to a separate export to comply with Next.js 15+ standards
- * and ensure clean build logs.
+ * CODINGDATAFY ROOT LAYOUT
+ * Purpose: Centralizes SEO, Global UI components (Header/Footer), and Performance monitoring.
+ * Note: Google Analytics is managed via Cloudflare Zaraz to optimize client-side performance.
  */
+
 export const metadata = {
-  title: "CodingDatafy",
-  description: "Advanced technical data insights and programming resources.",
+  title: {
+    default: "CodingDatafy | Documentation & Insights",
+    template: "%s | CodingDatafy"
+  },
+  description: "High-performance documentation for 99% of coding languages. Built for developers by CodingDatafy Organization.",
+  metadataBase: new URL('https://www.codingdatafy.com'),
+  alternates: {
+    canonical: '/',
+  },
 };
 
-/**
- * Viewport configuration for responsive design and browser UI colors.
- * Separating this prevents "Unsupported metadata" warnings during build.
- */
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: 'rgb(50 205 50)',
-  colorScheme: 'only light',
+  themeColor: '#32CD32', // LimeGreen for brand consistency
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* Verification for Google Search Console */}
+        {/* Search Console Verification */}
         <meta name="google-site-verification" content="KZMiUBpTZfkZsUt47NLT88ssUsu9hFOez6aaHVBvLqg" />
-
-        {/* Global Site Tag (gtag.js) - Google Analytics (GA4) */}
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=G-8GJDFYFWT2`}></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-8GJDFYFWT2');
-            `,
-          }}
-        />
-
-        {/* Legal and identity links */}
-        <link rel="terms-of-service" href="/terms-of-use" />
-        <link rel="privacy-policy" href="/privacy-policy" />
+        
+        {/* Favicon and Identity */}
         <link rel="icon" href="/images/favicon.png" />
       </head>
       <body>
         <div id="root">
-          {/* Main Application Header */}
+          {/* APPLICATION HEADER */}
           <header id="header">
             <a href="/" id="logo">
-              {/* Logo is optimized for LCP (Largest Contentful Paint) */}
               <img 
                 src="/images/logo.png" 
                 alt="CodingDatafy Logo" 
                 width="368" 
                 height="77" 
-                priority="true" 
+                priority="true" // Critical for LCP optimization
               />
             </a>
             <nav id="navigation">
@@ -72,40 +58,44 @@ export default function RootLayout({ children }) {
             </nav>
           </header>
 
-          {/* Dynamic Content Injection */}
-          {children}
+          {/* DYNAMIC CONTENT AREA */}
+          <main id="main-content">
+            {children}
+          </main>
 
-          {/* Main Application Footer */}
+          {/* APPLICATION FOOTER */}
           <footer id="footer">
-            <ul id="footer-links">
-              <li><a href="/about">About</a></li>
-              <li><a href="/contact">Contact</a></li>
-              <li><a href="/terms-of-use">Terms of Use</a></li>
-              <li><a href="/privacy-policy">Privacy policy</a></li>
-              <li><a href="/contribute">Contribute</a></li>
-              <li><a href="/support">Support</a></li>
-            </ul>
+            <nav id="footer-nav">
+              <ul id="footer-links">
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/terms-of-use">Terms of Use</a></li>
+                <li><a href="/privacy-policy">Privacy policy</a></li>
+                <li><a href="/contribute">Contribute</a></li>
+                <li><a href="/support">Support</a></li>
+              </ul>
+            </nav>
             
             <ul id="social-networks">
               <li>
-                <a href="https://www.github.com/codingdatafy" target="_blank" rel="external noopener noreferrer">
+                <a href="https://github.com/codingdatafy" target="_blank" rel="noopener noreferrer">
                   <img src="/images/github.png" alt="GitHub" width="32" height="32" loading="lazy" />
                 </a>
               </li>
             </ul>
 
             <p id="copyright">
-              <small>Copyright © 2026 <span>CodingDatafy</span>. All Rights Reserved.</small>
+              <small>Copyright © 2026 <strong>CodingDatafy</strong>. All Rights Reserved.</small>
             </p>
           </footer>
         </div>
 
-        {/* Vercel monitoring scripts injected at the end of the body */}
+        {/* PERFORMANCE MONITORING (Vercel Edge) */}
         <Analytics />
         <SpeedInsights />
 
-        {/* Custom client-side logic */}
-        <script src="/scripts/codingdatafy.js"></script>
+        {/* DEFERRED CLIENT SCRIPTS */}
+        <script src="/scripts/codingdatafy.js" defer></script>
       </body>
     </html>
   );
